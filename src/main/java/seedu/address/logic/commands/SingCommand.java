@@ -32,7 +32,7 @@ public class SingCommand extends Command {
     private MediaPlayer player;
 
     /**
-     * lyrics for the 1st song that could possibly be played
+     * lyrics for the song that could possibly be played in future
      */
     private final java.util.List<LyricLine> LYRICS1 = java.util.List.of(
             new LyricLine(0.3,  "希望你以后不会后悔没选择我"),
@@ -47,7 +47,7 @@ public class SingCommand extends Command {
         // setup media
         String path = getClass().getResource("/audio/song1.wav").toExternalForm();
         player = new MediaPlayer(new Media(path));
-        player.setStopTime(Duration.seconds(42));
+        player.setStopTime(Duration.seconds(20));
 
         // lyric timeline
         if (lyricsTimeline != null) lyricsTimeline.stop();
@@ -62,6 +62,10 @@ public class SingCommand extends Command {
             if (lyricsTimeline != null) lyricsTimeline.stop();
         });
 
-        return new CommandResult("Start the music!");
+        return new CommandResult("Start the music!\n" +
+                "希望你以后不会后悔没选择我\n" +
+                "也相信你有更好的生活\n" +
+                "我会在心里\n" +
+                "默默地为你而执着~");
     }
 }
