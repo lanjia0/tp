@@ -57,17 +57,12 @@ public class PersonCard extends UiPart<Region> {
         setLabelTextAndVisibility(address, person.getAddress().value);
         setLabelTextAndVisibility(email, person.getEmail().value);
 
-        // Handle priority with prefix
+        // Handle priority with prefix - always display, even if NONE
         String priorityValue = person.getPriority().getValue();
-        if (priorityValue == null || priorityValue.trim().isEmpty() || priorityValue.equalsIgnoreCase("NONE")) {
-            priority.setVisible(false);
-            priority.setManaged(false);
-        } else {
-            priority.setText("Priority: " + priorityValue);
-            priority.setVisible(true);
-            priority.setManaged(true);
-            setPriorityStyle(person.getPriority());
-        }
+        priority.setText("Priority: " + priorityValue);
+        priority.setVisible(true);
+        priority.setManaged(true);
+        setPriorityStyle(person.getPriority());
 
         // Handle tags
         if (person.getTags().isEmpty()) {
