@@ -52,14 +52,54 @@ public class PersonCard extends UiPart<Region> {
         this.person = person;
         id.setText(displayedIndex + ". ");
         name.setText(person.getName().fullName);
-        phone.setText(person.getPhone().value);
-        address.setText(person.getAddress().value);
-        email.setText(person.getEmail().value);
-        priority.setText("Priority: " + person.getPriority().getValue());
-        setPriorityStyle(person.getPriority());
-        person.getTags().stream()
-                .sorted(Comparator.comparing(tag -> tag.tagName))
-                .forEach(tag -> tags.getChildren().add(new Label(tag.tagName)));
+
+        setLabelTextAndVisibility(phone, person.getPhone().value);
+        setLabelTextAndVisibility(address, person.getAddress().value);
+        setLabelTextAndVisibility(email, person.getEmail().value);
+
+        // Handle priority with prefix
+        String priorityValue = person.getPriority().getValue();
+        if (priorityValue == null || priorityValue.trim().isEmpty() || priorityValue.equalsIgnoreCase("NONE")) {
+            priority.setVisible(false);
+            priority.setManaged(false);
+        } else {
+            priority.setText("Priority: " + priorityValue);
+            priority.setVisible(true);
+            priority.setManaged(true);
+            setPriorityStyle(person.getPriority());
+        }
+
+        // Handle tags
+        if (person.getTags().isEmpty()) {
+            tags.setVisible(false);
+            tags.setManaged(false);
+        } else {
+            tags.getChildren().clear();
+            person.getTags().stream()
+                    .sorted(Comparator.comparing(tag -> tag.tagName))
+                    .forEach(tag -> tags.getChildren().add(new Label(tag.tagName)));
+            tags.setVisible(true);
+            tags.setManaged(true);
+        }
+    }
+
+    /**
+     * Sets the text of a label and controls its visibility based on whether the value is empty.
+     * If the value is empty, the label is hidden and marked as unmanaged to collapse the space.
+     *
+     * @param label The label to update.
+     * @param value The text value to set.
+     */
+    private void setLabelTextAndVisibility(Label label, String value) {
+        if (value == null || value.trim().isEmpty()) {
+            label.setText("");
+            label.setVisible(false);
+            label.setManaged(false);
+        } else {
+            label.setText(value.trim());
+            label.setVisible(true);
+            label.setManaged(true);
+        }
     }
 
     /**
