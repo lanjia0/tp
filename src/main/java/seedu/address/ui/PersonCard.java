@@ -1,4 +1,3 @@
-
 package seedu.address.ui;
 import java.util.Comparator;
 
@@ -73,6 +72,12 @@ public class PersonCard extends UiPart<Region> {
         lastContactedDate.setText("Last Contacted: " + person.getLastContactedDate().toDisplayString());
         setPriorityStyle(person.getPriority());
 
+        // Hide fields if they are empty
+        hideIfEmpty(phone, person.getPhone().value);
+        hideIfEmpty(address, person.getAddress().value);
+        hideIfEmpty(email, person.getEmail().value);
+        hideIfEmpty(occupation, person.getOccupation().value);
+
         if (person.getTags().isEmpty()) {
             tags.setManaged(false);
             tags.setVisible(false);
@@ -81,6 +86,16 @@ public class PersonCard extends UiPart<Region> {
             person.getTags().stream()
                     .sorted(Comparator.comparing(tag -> tag.tagName))
                     .forEach(tag -> tags.getChildren().add(new Label(tag.tagName)));
+        }
+    }
+
+    /**
+     * Hides the label if the value is empty or blank.
+     */
+    private void hideIfEmpty(Label label, String value) {
+        if (value == null || value.trim().isEmpty()) {
+            label.setVisible(false);
+            label.setManaged(false);
         }
     }
 
